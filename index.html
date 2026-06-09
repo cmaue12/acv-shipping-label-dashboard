@@ -65,18 +65,18 @@
   <div class="bg-white border-b border-gray-200 px-6 py-3 flex flex-wrap items-center gap-4">
     <div class="flex items-center gap-2">
       <label class="text-xs font-medium text-gray-500 whitespace-nowrap">Date Range</label>
-      <select id="filter-start-date" onchange="applyFilters()" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"></select>
+      <select id="filter-start-date" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"></select>
       <span class="text-gray-400 text-xs">→</span>
-      <select id="filter-end-date" onchange="applyFilters()" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"></select>
+      <select id="filter-end-date" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"></select>
     </div>
     <div class="flex items-center gap-2">
       <label class="text-xs font-medium text-gray-500">Seller ID</label>
-      <input id="filter-seller" type="text" placeholder="Search…" oninput="applyFilters()"
+      <input id="filter-seller" type="text" placeholder="Search…"
              class="text-sm border border-gray-200 rounded-md px-2 py-1.5 w-32 focus:outline-none focus:ring-2 focus:ring-blue-400" />
     </div>
     <div class="flex items-center gap-2">
       <label class="text-xs font-medium text-gray-500">Behavior</label>
-      <select id="filter-behavior" onchange="applyFilters()" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <select id="filter-behavior" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
         <option value="">All</option>
         <option value="Multiple Labels">Multiple Labels</option>
         <option value="Consolidated">Consolidated</option>
@@ -85,19 +85,19 @@
     </div>
     <div class="flex items-center gap-2">
       <label class="text-xs font-medium text-gray-500">Dealer Type</label>
-      <select id="filter-dealertype" onchange="applyFilters()" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <select id="filter-dealertype" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
         <option value="">All</option>
       </select>
     </div>
     <div class="flex items-center gap-2">
       <label class="text-xs font-medium text-gray-500">Territory</label>
-      <select id="filter-territory" onchange="applyFilters()" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <select id="filter-territory" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
         <option value="">All</option>
       </select>
     </div>
     <div class="flex items-center gap-2">
       <label class="text-xs font-medium text-gray-500">Major Acct</label>
-      <select id="filter-majoraccount" onchange="applyFilters()" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
+      <select id="filter-majoraccount" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400">
         <option value="">All</option>
         <option value="true">Yes</option>
         <option value="false">No</option>
@@ -213,7 +213,7 @@
         <h2 class="text-sm font-semibold text-gray-700">Raw Data</h2>
         <div class="flex items-center gap-3">
           <span id="table-count" class="text-xs text-gray-400"></span>
-          <input id="table-search" type="text" placeholder="Search seller or date…" oninput="applyTableSearch()"
+          <input id="table-search" type="text" placeholder="Search seller or date…"
                  class="text-sm border border-gray-200 rounded-md px-2 py-1.5 w-44 focus:outline-none focus:ring-2 focus:ring-blue-400" />
         </div>
       </div>
@@ -333,6 +333,17 @@ function initDashboard() {
   populateDateFilters();
   populateDynamicFilters();
   applyFilters();
+
+  ['filter-start-date','filter-end-date','filter-behavior',
+   'filter-dealertype','filter-territory','filter-majoraccount'].forEach(id => {
+    document.getElementById(id).addEventListener('change', applyFilters);
+  });
+  const sellerInput = document.getElementById('filter-seller');
+  sellerInput.addEventListener('input', applyFilters);
+  sellerInput.addEventListener('change', applyFilters);
+  const tableSearch = document.getElementById('table-search');
+  tableSearch.addEventListener('input', applyTableSearch);
+  tableSearch.addEventListener('change', applyTableSearch);
 }
 
 function populateDynamicFilters() {
@@ -670,7 +681,7 @@ function renderDealerTypeBreakdown() {
 
   const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
   const ctx = document.getElementById('dealertype-chart').getContext('2d');
-  if (dealerTypeChartInstance) dealerTypeChartInstance.destroy();
+  if (dealerTypeChartInstance) { dealerTypeChartInstance.destroy(); dealerTypeChartInstance = null; }
 
   if (!sorted.length) return;
 
