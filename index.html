@@ -24,6 +24,7 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans min-h-screen">
 
+<!-- ───── Header ───── -->
 <header class="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
   <div>
     <h1 class="text-lg font-semibold text-gray-900">Title Shipping Label Consolidation</h1>
@@ -32,6 +33,7 @@
   <div id="data-badge" class="hidden text-xs bg-blue-50 text-blue-700 border border-blue-200 rounded-full px-3 py-1 font-medium"></div>
 </header>
 
+<!-- ───── Upload Section ───── -->
 <div id="upload-section" class="flex items-center justify-center min-h-[70vh] px-6">
   <div class="text-center max-w-md w-full">
     <div id="upload-zone"
@@ -40,15 +42,15 @@
          ondragover="handleDragOver(event)"
          ondragleave="handleDragLeave(event)"
          ondrop="handleDrop(event)">
-      <div class="text-4xl mb-4">&#x1F4E6;</div>
+      <div class="text-4xl mb-4">📦</div>
       <p class="text-base font-medium text-gray-700 mb-1">Drop your CSV here</p>
       <p class="text-sm text-gray-400">or click to browse</p>
-      <p class="text-xs text-gray-300 mt-3">bq-results-*.csv &middot; inbound shipping data</p>
+      <p class="text-xs text-gray-300 mt-3">bq-results-*.csv · inbound shipping data</p>
     </div>
     <input id="file-input" type="file" accept=".csv" class="hidden" onchange="handleFileInput(event)" />
     <div id="upload-error" class="hidden mt-3 text-sm text-red-600"></div>
     <div id="upload-progress" class="hidden mt-4">
-      <div class="text-sm text-gray-500 mb-2">Parsing&hellip;</div>
+      <div class="text-sm text-gray-500 mb-2">Parsing…</div>
       <div class="w-full bg-gray-200 rounded-full h-1.5">
         <div class="bg-blue-500 h-1.5 rounded-full animate-pulse w-3/4"></div>
       </div>
@@ -56,17 +58,20 @@
   </div>
 </div>
 
+<!-- ───── Dashboard ───── -->
 <div id="dashboard" class="hidden">
+
+  <!-- Filter bar -->
   <div class="bg-white border-b border-gray-200 px-6 py-3 flex flex-wrap items-center gap-4">
     <div class="flex items-center gap-2">
       <label class="text-xs font-medium text-gray-500 whitespace-nowrap">Date Range</label>
       <select id="filter-start-date" onchange="applyFilters()" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"></select>
-      <span class="text-gray-400 text-xs">&rarr;</span>
+      <span class="text-gray-400 text-xs">→</span>
       <select id="filter-end-date" onchange="applyFilters()" class="text-sm border border-gray-200 rounded-md px-2 py-1.5 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"></select>
     </div>
     <div class="flex items-center gap-2">
       <label class="text-xs font-medium text-gray-500">Seller ID</label>
-      <input id="filter-seller" type="text" placeholder="Search&hellip;" oninput="applyFilters()"
+      <input id="filter-seller" type="text" placeholder="Search…" oninput="applyFilters()"
              class="text-sm border border-gray-200 rounded-md px-2 py-1.5 w-32 focus:outline-none focus:ring-2 focus:ring-blue-400" />
     </div>
     <div class="flex items-center gap-2">
@@ -102,30 +107,40 @@
   </div>
 
   <div class="px-6 py-5 space-y-5">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
       <div class="bg-white rounded-xl border border-gray-200 p-4">
         <div class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">Labels Saved (potential)</div>
-        <div id="stat-labels-saved" class="text-3xl font-bold text-blue-600">&mdash;</div>
+        <div id="stat-labels-saved" class="text-3xl font-bold text-blue-600">—</div>
         <div class="text-xs text-gray-400 mt-1">if each seller consolidates per day</div>
       </div>
       <div class="bg-white rounded-xl border border-gray-200 p-4">
+        <div class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">Est. Cost Saved</div>
+        <div id="stat-cost-saved" class="text-3xl font-bold text-green-600">—</div>
+        <div class="text-xs text-gray-400 mt-1">@ $12.50 / label</div>
+      </div>
+      <div class="bg-white rounded-xl border border-gray-200 p-4">
         <div class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">Offending Seller-Days</div>
-        <div id="stat-offending-days" class="text-3xl font-bold text-orange-500">&mdash;</div>
-        <div class="text-xs text-gray-400 mt-1">seller &times; day pairs using multiple labels</div>
+        <div id="stat-offending-days" class="text-3xl font-bold text-orange-500">—</div>
+        <div class="text-xs text-gray-400 mt-1">seller × day pairs using multiple labels</div>
       </div>
       <div class="bg-white rounded-xl border border-gray-200 p-4">
         <div class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">Unique Sellers (offending)</div>
-        <div id="stat-sellers" class="text-3xl font-bold text-gray-700">&mdash;</div>
+        <div id="stat-sellers" class="text-3xl font-bold text-gray-700">—</div>
         <div class="text-xs text-gray-400 mt-1">distinct sellingorganizationids</div>
       </div>
       <div class="bg-white rounded-xl border border-gray-200 p-4">
         <div class="text-xs font-medium text-gray-400 uppercase tracking-wide mb-1">Avg Labels Saved / Day</div>
-        <div id="stat-avg-daily" class="text-3xl font-bold text-gray-700">&mdash;</div>
+        <div id="stat-avg-daily" class="text-3xl font-bold text-gray-700">—</div>
         <div class="text-xs text-gray-400 mt-1">across filtered date range</div>
       </div>
     </div>
 
+    <!-- Chart + Top Offenders -->
     <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+
+      <!-- Daily Trend -->
       <div class="lg:col-span-3 bg-white rounded-xl border border-gray-200 p-4">
         <div class="flex items-center justify-between mb-3">
           <h2 class="text-sm font-semibold text-gray-700">Daily Potential Labels Saved</h2>
@@ -135,6 +150,8 @@
           <canvas id="daily-chart"></canvas>
         </div>
       </div>
+
+      <!-- Top Offenders -->
       <div class="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-4 flex flex-col">
         <div class="flex items-center justify-between mb-3">
           <h2 class="text-sm font-semibold text-gray-700">Top Offenders</h2>
@@ -155,57 +172,81 @@
               </tr>
             </thead>
             <tbody id="top-offenders-body">
-              <tr><td colspan="8" class="py-4 text-center text-gray-300">Loading&hellip;</td></tr>
+              <tr><td colspan="8" class="py-4 text-center text-gray-300">Loading…</td></tr>
             </tbody>
           </table>
         </div>
       </div>
     </div>
 
+    <!-- Behavior Breakdown -->
     <div class="bg-white rounded-xl border border-gray-200 p-4">
       <h2 class="text-sm font-semibold text-gray-700 mb-3">Behavior Breakdown</h2>
-      <div id="behavior-breakdown" class="flex flex-wrap gap-6"></div>
+      <div id="behavior-breakdown" class="flex flex-wrap gap-6">
+        <!-- populated by JS -->
+      </div>
     </div>
 
+    <!-- Dealer Type + Territory Breakdowns -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
       <div class="bg-white rounded-xl border border-gray-200 p-4">
         <div class="flex items-center justify-between mb-3">
           <h2 class="text-sm font-semibold text-gray-700">Labels Saved by Dealer Type</h2>
           <span class="text-xs text-gray-400">Multiple Labels rows only</span>
         </div>
-        <div id="dealertype-breakdown"></div>
+        <div style="position:relative;height:220px;">
+          <canvas id="dealertype-chart"></canvas>
+        </div>
       </div>
       <div class="bg-white rounded-xl border border-gray-200 p-4">
         <div class="flex items-center justify-between mb-3">
-          <h2 class="text-sm font-semibold text-gray-700">Labels Saved by Territory</h2>
-          <span class="text-xs text-gray-400">Top 15 &middot; Multiple Labels only</span>
+          <h2 class="text-sm font-semibold text-gray-700">Top 10 Territories by Labels Saved</h2>
+          <span class="text-xs text-gray-400">Multiple Labels only</span>
         </div>
-        <div id="territory-breakdown"></div>
+        <div id="territory-breakdown"><!-- populated by JS --></div>
       </div>
     </div>
 
+    <!-- Raw Data Table -->
     <div class="bg-white rounded-xl border border-gray-200">
       <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between flex-wrap gap-2">
         <h2 class="text-sm font-semibold text-gray-700">Raw Data</h2>
         <div class="flex items-center gap-3">
           <span id="table-count" class="text-xs text-gray-400"></span>
-          <input id="table-search" type="text" placeholder="Search seller or date&hellip;" oninput="applyTableSearch()"
+          <input id="table-search" type="text" placeholder="Search seller or date…" oninput="applyTableSearch()"
                  class="text-sm border border-gray-200 rounded-md px-2 py-1.5 w-44 focus:outline-none focus:ring-2 focus:ring-blue-400" />
         </div>
       </div>
+
       <div class="overflow-x-auto">
         <table class="w-full text-sm">
           <thead>
             <tr class="text-left text-xs text-gray-400 bg-gray-50 border-b border-gray-100">
-              <th class="px-4 py-2.5 font-medium sort-btn" onclick="sortTable('sellingorganizationid')">Seller ID <span id="sort-sellingorganizationid"></span></th>
-              <th class="px-4 py-2.5 font-medium sort-btn" onclick="sortTable('dbatradename')">Name <span id="sort-dbatradename"></span></th>
-              <th class="px-4 py-2.5 font-medium sort-btn" onclick="sortTable('dealertype')">Dealer Type <span id="sort-dealertype"></span></th>
-              <th class="px-4 py-2.5 font-medium sort-btn" onclick="sortTable('territoryname')">Territory <span id="sort-territoryname"></span></th>
+              <th class="px-4 py-2.5 font-medium sort-btn" onclick="sortTable('sellingorganizationid')">
+                Seller ID <span id="sort-sellingorganizationid"></span>
+              </th>
+              <th class="px-4 py-2.5 font-medium sort-btn" onclick="sortTable('dbatradename')">
+                Name <span id="sort-dbatradename"></span>
+              </th>
+              <th class="px-4 py-2.5 font-medium sort-btn" onclick="sortTable('dealertype')">
+                Dealer Type <span id="sort-dealertype"></span>
+              </th>
+              <th class="px-4 py-2.5 font-medium sort-btn" onclick="sortTable('territoryname')">
+                Territory <span id="sort-territoryname"></span>
+              </th>
               <th class="px-4 py-2.5 font-medium">Major Acct</th>
-              <th class="px-4 py-2.5 font-medium sort-btn" onclick="sortTable('received_day')">Date <span id="sort-received_day"></span></th>
-              <th class="px-4 py-2.5 font-medium sort-btn text-right" onclick="sortTable('total_titles_count')">Titles <span id="sort-total_titles_count"></span></th>
-              <th class="px-4 py-2.5 font-medium sort-btn text-right" onclick="sortTable('actual_labels_count')">Labels Used <span id="sort-actual_labels_count"></span></th>
-              <th class="px-4 py-2.5 font-medium sort-btn text-right" onclick="sortTable('potential_labels_saved')">Labels Saved <span id="sort-potential_labels_saved">&#x2193;</span></th>
+              <th class="px-4 py-2.5 font-medium sort-btn" onclick="sortTable('received_day')">
+                Date <span id="sort-received_day"></span>
+              </th>
+              <th class="px-4 py-2.5 font-medium sort-btn text-right" onclick="sortTable('total_titles_count')">
+                Titles <span id="sort-total_titles_count"></span>
+              </th>
+              <th class="px-4 py-2.5 font-medium sort-btn text-right" onclick="sortTable('actual_labels_count')">
+                Labels Used <span id="sort-actual_labels_count"></span>
+              </th>
+              <th class="px-4 py-2.5 font-medium sort-btn text-right" onclick="sortTable('potential_labels_saved')">
+                Labels Saved <span id="sort-potential_labels_saved">↓</span>
+              </th>
               <th class="px-4 py-2.5 font-medium">Behavior</th>
             </tr>
           </thead>
@@ -214,38 +255,67 @@
           </tbody>
         </table>
       </div>
+
       <div class="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
-        <button id="prev-btn" onclick="changePage(-1)" class="text-sm px-3 py-1.5 border border-gray-200 rounded-md hover:bg-gray-50 disabled:opacity-40" disabled>&larr; Prev</button>
+        <button id="prev-btn" onclick="changePage(-1)" class="text-sm px-3 py-1.5 border border-gray-200 rounded-md hover:bg-gray-50 disabled:opacity-40" disabled>← Prev</button>
         <span id="page-info" class="text-xs text-gray-400"></span>
-        <button id="next-btn" onclick="changePage(1)" class="text-sm px-3 py-1.5 border border-gray-200 rounded-md hover:bg-gray-50 disabled:opacity-40">Next &rarr;</button>
+        <button id="next-btn" onclick="changePage(1)" class="text-sm px-3 py-1.5 border border-gray-200 rounded-md hover:bg-gray-50 disabled:opacity-40">Next →</button>
       </div>
     </div>
-  </div>
-</div>
+
+  </div><!-- /px-6 -->
+</div><!-- /dashboard -->
 
 <script>
-let allData = [], filteredData = [], tableData = [], allDates = [];
+// ── State ──────────────────────────────────────────────────────────────────
+let allData = [];
+let filteredData = [];
+let tableData = [];   // filtered + table-searched
+let allDates = [];
 let dailyChartInstance = null;
+let dealerTypeChartInstance = null;
 let currentPage = 1;
 const PAGE_SIZE = 50;
-let sortColTable = 'potential_labels_saved', sortDirTable = 'desc';
+let sortCol = 'potential_labels_saved';
+let sortDir = 'desc';
 
-function handleDragOver(e) { e.preventDefault(); document.getElementById('upload-zone').classList.add('drag-over'); }
-function handleDragLeave(e) { document.getElementById('upload-zone').classList.remove('drag-over'); }
-function handleDrop(e) { e.preventDefault(); document.getElementById('upload-zone').classList.remove('drag-over'); const f = e.dataTransfer.files[0]; if (f) processFile(f); }
-function handleFileInput(e) { const f = e.target.files[0]; if (f) processFile(f); }
+// ── Upload Handlers ────────────────────────────────────────────────────────
+function handleDragOver(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.add('drag-over');
+}
+function handleDragLeave(e) {
+  document.getElementById('upload-zone').classList.remove('drag-over');
+}
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) processFile(file);
+}
+function handleFileInput(e) {
+  const file = e.target.files[0];
+  if (file) processFile(file);
+}
 
 function processFile(file) {
-  if (!file.name.endsWith('.csv')) { document.getElementById('upload-error').textContent = 'Please upload a .csv file.'; document.getElementById('upload-error').classList.remove('hidden'); return; }
+  if (!file.name.endsWith('.csv')) {
+    document.getElementById('upload-error').textContent = 'Please upload a .csv file.';
+    document.getElementById('upload-error').classList.remove('hidden');
+    return;
+  }
   document.getElementById('upload-progress').classList.remove('hidden');
   document.getElementById('upload-error').classList.add('hidden');
+
   Papa.parse(file, {
-    header: true, dynamicTyping: true, skipEmptyLines: true,
+    header: true,
+    dynamicTyping: true,
+    skipEmptyLines: true,
     complete(results) {
       allData = results.data.filter(r => r.sellingorganizationid != null);
       document.getElementById('upload-section').classList.add('hidden');
       document.getElementById('dashboard').classList.remove('hidden');
-      document.getElementById('data-badge').textContent = allData.length.toLocaleString() + ' rows loaded';
+      document.getElementById('data-badge').textContent = `${allData.length.toLocaleString()} rows loaded`;
       document.getElementById('data-badge').classList.remove('hidden');
       initDashboard();
     },
@@ -257,6 +327,7 @@ function processFile(file) {
   });
 }
 
+// ── Init ───────────────────────────────────────────────────────────────────
 function initDashboard() {
   allDates = [...new Set(allData.map(r => r.received_day))].sort();
   populateDateFilters();
@@ -265,34 +336,49 @@ function initDashboard() {
 }
 
 function populateDynamicFilters() {
-  const dts = [...new Set(allData.map(r => r.dealertype).filter(Boolean))].sort();
-  const terrs = [...new Set(allData.map(r => r.territoryname).filter(Boolean))].sort();
+  const dealerTypes = [...new Set(allData.map(r => r.dealertype).filter(Boolean))].sort();
+  const territories = [...new Set(allData.map(r => r.territoryname).filter(Boolean))].sort();
   const dtSel = document.getElementById('filter-dealertype');
-  dtSel.innerHTML = '<option value="">All</option>' + dts.map(v => '<option value="' + v + '">' + v + '</option>').join('');
+  dtSel.innerHTML = '<option value="">All</option>';
+  dealerTypes.forEach(v => dtSel.innerHTML += `<option value="${v}">${v}</option>`);
   const tSel = document.getElementById('filter-territory');
-  tSel.innerHTML = '<option value="">All</option>' + terrs.map(v => '<option value="' + v + '">' + v + '</option>').join('');
+  tSel.innerHTML = '<option value="">All</option>';
+  territories.forEach(v => tSel.innerHTML += `<option value="${v}">${v}</option>`);
 }
 
 function populateDateFilters() {
-  const s = document.getElementById('filter-start-date'), e = document.getElementById('filter-end-date');
-  s.innerHTML = ''; e.innerHTML = '';
-  allDates.forEach(d => { const o = '<option value="' + d + '">' + fmt(d) + '</option>'; s.innerHTML += o; e.innerHTML += o; });
-  e.value = allDates[allDates.length - 1];
+  const startSel = document.getElementById('filter-start-date');
+  const endSel = document.getElementById('filter-end-date');
+  startSel.innerHTML = '';
+  endSel.innerHTML = '';
+  allDates.forEach(d => {
+    startSel.innerHTML += `<option value="${d}">${fmt(d)}</option>`;
+    endSel.innerHTML += `<option value="${d}">${fmt(d)}</option>`;
+  });
+  endSel.value = allDates[allDates.length - 1];
 }
 
-function fmt(d) {
-  const parts = d.split('-');
+function fmt(dateStr) {
+  // "2026-04-01" → "Apr 1"
+  const [, , dd] = dateStr.split('-');
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  return months[parseInt(parts[1]) - 1] + ' ' + parseInt(parts[2]);
+  const m = parseInt(dateStr.split('-')[1]) - 1;
+  return `${months[m]} ${parseInt(dd)}`;
 }
 
 function resetFilters() {
   document.getElementById('filter-start-date').value = allDates[0];
   document.getElementById('filter-end-date').value = allDates[allDates.length - 1];
-  ['filter-seller','filter-behavior','filter-dealertype','filter-territory','filter-majoraccount','table-search'].forEach(id => { document.getElementById(id).value = ''; });
+  document.getElementById('filter-seller').value = '';
+  document.getElementById('filter-behavior').value = '';
+  document.getElementById('filter-dealertype').value = '';
+  document.getElementById('filter-territory').value = '';
+  document.getElementById('filter-majoraccount').value = '';
+  document.getElementById('table-search').value = '';
   applyFilters();
 }
 
+// ── Core Filter Logic ──────────────────────────────────────────────────────
 function applyFilters() {
   const startDate = document.getElementById('filter-start-date').value;
   const endDate = document.getElementById('filter-end-date').value;
@@ -301,158 +387,355 @@ function applyFilters() {
   const dealertype = document.getElementById('filter-dealertype').value;
   const territory = document.getElementById('filter-territory').value;
   const majoraccount = document.getElementById('filter-majoraccount').value;
+
   filteredData = allData.filter(r => {
     if (r.received_day < startDate || r.received_day > endDate) return false;
-    if (seller && !String(r.sellingorganizationid).includes(seller) && !(r.dbatradename||'').toLowerCase().includes(seller) && !(r.legalname||'').toLowerCase().includes(seller)) return false;
+    if (seller && !String(r.sellingorganizationid).includes(seller) &&
+        !(r.dbatradename || '').toLowerCase().includes(seller) &&
+        !(r.legalname || '').toLowerCase().includes(seller)) return false;
     if (behavior && r.shipping_behavior !== behavior) return false;
     if (dealertype && r.dealertype !== dealertype) return false;
     if (territory && r.territoryname !== territory) return false;
     if (majoraccount !== '' && String(r.majoraccount) !== majoraccount) return false;
     return true;
   });
+
   document.getElementById('table-search').value = '';
-  tableData = filteredData; currentPage = 1;
-  renderSummaryCards(); renderDailyChart(); renderTopOffenders(); renderBehaviorBreakdown(); renderDealerTypeBreakdown(); renderTerritoryBreakdown(); renderTable();
+  tableData = filteredData;
+  currentPage = 1;
+
+  renderSummaryCards();
+  renderDailyChart();
+  renderTopOffenders();
+  renderBehaviorBreakdown();
+  renderDealerTypeBreakdown();
+  renderTerritoryBreakdown();
+  renderTable();
 }
 
 function applyTableSearch() {
   const q = document.getElementById('table-search').value.trim().toLowerCase();
-  tableData = q ? filteredData.filter(r =>
-    String(r.sellingorganizationid).includes(q) || String(r.received_day).includes(q) ||
-    (r.dbatradename||'').toLowerCase().includes(q) || (r.legalname||'').toLowerCase().includes(q) ||
-    (r.dealertype||'').toLowerCase().includes(q) || (r.territoryname||'').toLowerCase().includes(q)
-  ) : filteredData;
-  currentPage = 1; renderTable();
+  if (!q) {
+    tableData = filteredData;
+  } else {
+    tableData = filteredData.filter(r =>
+      String(r.sellingorganizationid).includes(q) ||
+      String(r.received_day).includes(q) ||
+      (r.dbatradename || '').toLowerCase().includes(q) ||
+      (r.legalname || '').toLowerCase().includes(q) ||
+      (r.dealertype || '').toLowerCase().includes(q) ||
+      (r.territoryname || '').toLowerCase().includes(q)
+    );
+  }
+  currentPage = 1;
+  renderTable();
 }
 
+// ── Summary Cards ──────────────────────────────────────────────────────────
 function renderSummaryCards() {
-  const multi = filteredData.filter(r => r.shipping_behavior === 'Multiple Labels');
-  const totalSaved = multi.reduce((s, r) => s + (r.potential_labels_saved || 0), 0);
-  const dates = [...new Set(filteredData.map(r => r.received_day))];
+  const multiRows = filteredData.filter(r => r.shipping_behavior === 'Multiple Labels');
+  const totalSaved = multiRows.reduce((s, r) => s + (r.potential_labels_saved || 0), 0);
+  const offendingDays = multiRows.length;
+  const uniqueSellers = new Set(multiRows.map(r => r.sellingorganizationid)).size;
+
+  const dateRange = [...new Set(filteredData.map(r => r.received_day))];
+  const avgDaily = dateRange.length > 0 ? (totalSaved / dateRange.length) : 0;
+
+  const costSaved = totalSaved * 12.50;
+  const costFormatted = costSaved >= 1000
+    ? '$' + (costSaved / 1000).toFixed(1) + 'k'
+    : '$' + costSaved.toFixed(0);
+
   document.getElementById('stat-labels-saved').textContent = totalSaved.toLocaleString();
-  document.getElementById('stat-offending-days').textContent = multi.length.toLocaleString();
-  document.getElementById('stat-sellers').textContent = new Set(multi.map(r => r.sellingorganizationid)).size.toLocaleString();
-  document.getElementById('stat-avg-daily').textContent = dates.length > 0 ? (totalSaved / dates.length).toFixed(0) : '0';
+  document.getElementById('stat-cost-saved').textContent = costFormatted;
+  document.getElementById('stat-offending-days').textContent = offendingDays.toLocaleString();
+  document.getElementById('stat-sellers').textContent = uniqueSellers.toLocaleString();
+  document.getElementById('stat-avg-daily').textContent = avgDaily.toFixed(0);
 }
 
+// ── Daily Chart ────────────────────────────────────────────────────────────
 function renderDailyChart() {
-  const dates = [...new Set(filteredData.map(r => r.received_day))].sort();
-  const byDay = {}; dates.forEach(d => byDay[d] = 0);
-  filteredData.filter(r => r.shipping_behavior === 'Multiple Labels').forEach(r => { byDay[r.received_day] = (byDay[r.received_day]||0) + (r.potential_labels_saved||0); });
+  const dateRange = [...new Set(filteredData.map(r => r.received_day))].sort();
+  const byDay = {};
+  dateRange.forEach(d => byDay[d] = 0);
+
+  filteredData
+    .filter(r => r.shipping_behavior === 'Multiple Labels')
+    .forEach(r => { byDay[r.received_day] = (byDay[r.received_day] || 0) + (r.potential_labels_saved || 0); });
+
+  const labels = dateRange.map(fmt);
+  const values = dateRange.map(d => byDay[d] || 0);
+
   const ctx = document.getElementById('daily-chart').getContext('2d');
   if (dailyChartInstance) dailyChartInstance.destroy();
+
   dailyChartInstance = new Chart(ctx, {
     type: 'bar',
-    data: { labels: dates.map(fmt), datasets: [{ label: 'Labels Saved', data: dates.map(d => byDay[d]||0), backgroundColor: 'rgba(59,130,246,0.7)', borderColor: 'rgba(59,130,246,1)', borderWidth: 1, borderRadius: 3 }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { title: items => dates[items[0].dataIndex], label: item => ' ' + item.raw.toLocaleString() + ' labels saved' } } }, scales: { x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 45 } }, y: { grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } } } }
+    data: {
+      labels,
+      datasets: [{
+        label: 'Labels Saved',
+        data: values,
+        backgroundColor: 'rgba(59,130,246,0.7)',
+        borderColor: 'rgba(59,130,246,1)',
+        borderWidth: 1,
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: (items) => dateRange[items[0].dataIndex],
+            label: (item) => ` ${item.raw.toLocaleString()} labels saved`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { font: { size: 10 }, maxRotation: 45 }
+        },
+        y: {
+          grid: { color: '#f1f5f9' },
+          ticks: { font: { size: 10 } }
+        }
+      }
+    }
   });
 }
 
+// ── Top Offenders ──────────────────────────────────────────────────────────
 function renderTopOffenders() {
+  const multiRows = filteredData.filter(r => r.shipping_behavior === 'Multiple Labels');
   const map = {};
-  filteredData.filter(r => r.shipping_behavior === 'Multiple Labels').forEach(r => {
+  multiRows.forEach(r => {
     const id = r.sellingorganizationid;
-    if (!map[id]) map[id] = { saved: 0, days: 0, titles: 0, name: r.dbatradename||r.legalname||'', dealertype: r.dealertype||'', territory: r.territoryname||'' };
-    map[id].saved += r.potential_labels_saved||0; map[id].days += 1; map[id].titles += r.total_titles_count||0;
+    if (!map[id]) map[id] = { saved: 0, days: 0, titles: 0, name: r.dbatradename || r.legalname || '', dealertype: r.dealertype || '', territory: r.territoryname || '' };
+    map[id].saved += r.potential_labels_saved || 0;
+    map[id].days += 1;
+    map[id].titles += r.total_titles_count || 0;
   });
-  const sorted = Object.entries(map).map(([id,v]) => ({id,...v})).sort((a,b) => b.saved-a.saved).slice(0,25);
+
+  const sorted = Object.entries(map)
+    .map(([id, v]) => ({ id, ...v }))
+    .sort((a, b) => b.saved - a.saved)
+    .slice(0, 25);
+
   const tbody = document.getElementById('top-offenders-body');
-  if (!sorted.length) { tbody.innerHTML = '<tr><td colspan="8" class="py-4 text-center text-gray-300 text-xs">No data</td></tr>'; return; }
-  tbody.innerHTML = sorted.map((r,i) =>
-    '<tr class="border-b border-gray-50 hover:bg-blue-50 cursor-default" onclick="filterBySeller(\'' + r.id + '\')">' +
-    '<td class="py-1.5 pr-2 text-gray-300 font-medium">' + (i+1) + '</td>' +
-    '<td class="py-1.5 pr-2 font-medium text-blue-700 text-xs">' + r.id + '</td>' +
-    '<td class="py-1.5 pr-2 text-gray-600 text-xs">' + r.name + '</td>' +
-    '<td class="py-1.5 pr-2 text-gray-500 text-xs">' + r.dealertype + '</td>' +
-    '<td class="py-1.5 pr-2 text-gray-500 text-xs">' + r.territory + '</td>' +
-    '<td class="py-1.5 pr-2 text-right font-semibold text-red-600">' + r.saved.toLocaleString() + '</td>' +
-    '<td class="py-1.5 pr-2 text-right text-gray-500">' + r.days + '</td>' +
-    '<td class="py-1.5 text-right text-gray-500">' + r.titles.toLocaleString() + '</td></tr>'
-  ).join('');
+  if (sorted.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" class="py-4 text-center text-gray-300 text-xs">No data</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = sorted.map((r, i) => `
+    <tr class="border-b border-gray-50 hover:bg-blue-50 cursor-default" onclick="filterBySeller('${r.id}')">
+      <td class="py-1.5 pr-2 text-gray-300 font-medium">${i + 1}</td>
+      <td class="py-1.5 pr-2 font-medium text-blue-700 text-xs">${r.id}</td>
+      <td class="py-1.5 pr-2 text-gray-600 text-xs">${r.name}</td>
+      <td class="py-1.5 pr-2 text-gray-500 text-xs">${r.dealertype}</td>
+      <td class="py-1.5 pr-2 text-gray-500 text-xs">${r.territory}</td>
+      <td class="py-1.5 pr-2 text-right font-semibold text-red-600">${r.saved.toLocaleString()}</td>
+      <td class="py-1.5 pr-2 text-right text-gray-500">${r.days}</td>
+      <td class="py-1.5 text-right text-gray-500">${r.titles.toLocaleString()}</td>
+    </tr>
+  `).join('');
 }
 
-function filterBySeller(id) { document.getElementById('filter-seller').value = id; applyFilters(); }
+function filterBySeller(id) {
+  document.getElementById('filter-seller').value = id;
+  applyFilters();
+}
 
+// ── Behavior Breakdown ─────────────────────────────────────────────────────
 function renderBehaviorBreakdown() {
   const counts = { 'Multiple Labels': 0, 'Consolidated': 0, 'Single Title': 0 };
-  filteredData.forEach(r => { if (counts[r.shipping_behavior] !== undefined) counts[r.shipping_behavior]++; });
+  filteredData.forEach(r => {
+    if (counts[r.shipping_behavior] !== undefined) counts[r.shipping_behavior]++;
+  });
   const total = filteredData.length || 1;
-  const colors = { 'Multiple Labels': { text: 'text-red-700', bar: 'bg-red-400' }, 'Consolidated': { text: 'text-green-700', bar: 'bg-green-400' }, 'Single Title': { text: 'text-gray-600', bar: 'bg-gray-300' } };
+
+  const colors = {
+    'Multiple Labels': { bg: 'bg-red-100', text: 'text-red-700', bar: 'bg-red-400' },
+    'Consolidated': { bg: 'bg-green-100', text: 'text-green-700', bar: 'bg-green-400' },
+    'Single Title': { bg: 'bg-gray-100', text: 'text-gray-600', bar: 'bg-gray-300' },
+  };
+
   document.getElementById('behavior-breakdown').innerHTML = Object.entries(counts).map(([label, count]) => {
-    const pct = ((count/total)*100).toFixed(1); const c = colors[label];
-    return '<div class="flex-1 min-w-[180px]"><div class="flex justify-between items-center mb-1"><span class="text-xs font-medium ' + c.text + '">' + label + '</span><span class="text-xs text-gray-500">' + count.toLocaleString() + ' (' + pct + '%)</span></div><div class="h-2 rounded-full bg-gray-100"><div class="h-2 rounded-full ' + c.bar + '" style="width:' + pct + '%"></div></div></div>';
+    const pct = ((count / total) * 100).toFixed(1);
+    const c = colors[label];
+    return `
+      <div class="flex-1 min-w-[180px]">
+        <div class="flex justify-between items-center mb-1">
+          <span class="text-xs font-medium ${c.text}">${label}</span>
+          <span class="text-xs text-gray-500">${count.toLocaleString()} (${pct}%)</span>
+        </div>
+        <div class="h-2 rounded-full bg-gray-100">
+          <div class="h-2 rounded-full ${c.bar}" style="width:${pct}%"></div>
+        </div>
+      </div>
+    `;
   }).join('');
 }
 
+// ── Raw Data Table ─────────────────────────────────────────────────────────
+let sortColTable = 'potential_labels_saved';
+let sortDirTable = 'desc';
+
 function sortTable(col) {
-  sortDirTable = sortColTable === col ? (sortDirTable === 'desc' ? 'asc' : 'desc') : 'desc';
-  sortColTable = col; currentPage = 1; renderTable();
+  if (sortColTable === col) {
+    sortDirTable = sortDirTable === 'desc' ? 'asc' : 'desc';
+  } else {
+    sortColTable = col;
+    sortDirTable = 'desc';
+  }
+  currentPage = 1;
+  renderTable();
 }
 
 function renderTable() {
+  // Update sort indicators
   ['sellingorganizationid','dbatradename','dealertype','territoryname','received_day','total_titles_count','actual_labels_count','potential_labels_saved'].forEach(c => {
-    const el = document.getElementById('sort-' + c); if (el) el.textContent = c === sortColTable ? (sortDirTable === 'desc' ? '&#x2193;' : '&#x2191;') : '';
+    const el = document.getElementById('sort-' + c);
+    if (el) el.textContent = c === sortColTable ? (sortDirTable === 'desc' ? '↓' : '↑') : '';
   });
-  const sorted = [...tableData].sort((a,b) => {
+
+  const sorted = [...tableData].sort((a, b) => {
     let av = a[sortColTable], bv = b[sortColTable];
-    if (typeof av === 'string') av = av.toLowerCase(); if (typeof bv === 'string') bv = bv.toLowerCase();
-    return av < bv ? (sortDirTable==='asc'?-1:1) : av > bv ? (sortDirTable==='asc'?1:-1) : 0;
+    if (typeof av === 'string') av = av.toLowerCase();
+    if (typeof bv === 'string') bv = bv.toLowerCase();
+    if (av < bv) return sortDirTable === 'asc' ? -1 : 1;
+    if (av > bv) return sortDirTable === 'asc' ? 1 : -1;
+    return 0;
   });
-  const totalPages = Math.max(1, Math.ceil(sorted.length/PAGE_SIZE));
+
+  const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
   currentPage = Math.min(currentPage, totalPages);
-  const start = (currentPage-1)*PAGE_SIZE, page = sorted.slice(start, start+PAGE_SIZE);
-  document.getElementById('table-count').textContent = tableData.length.toLocaleString() + ' rows';
-  document.getElementById('page-info').textContent = 'Page ' + currentPage + ' of ' + totalPages;
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const page = sorted.slice(start, start + PAGE_SIZE);
+
+  document.getElementById('table-count').textContent = `${tableData.length.toLocaleString()} rows`;
+  document.getElementById('page-info').textContent = `Page ${currentPage} of ${totalPages}`;
   document.getElementById('prev-btn').disabled = currentPage === 1;
   document.getElementById('next-btn').disabled = currentPage === totalPages;
-  const badgeClass = { 'Multiple Labels': 'badge-multiple', 'Consolidated': 'badge-consolidated', 'Single Title': 'badge-single' };
+
+  const badgeClass = {
+    'Multiple Labels': 'badge-multiple',
+    'Consolidated': 'badge-consolidated',
+    'Single Title': 'badge-single',
+  };
+
   const tbody = document.getElementById('data-table-body');
-  if (!page.length) { tbody.innerHTML = '<tr><td colspan="10" class="px-4 py-8 text-center text-gray-300">No results</td></tr>'; return; }
-  tbody.innerHTML = page.map(r =>
-    '<tr class="table-row border-b border-gray-50">' +
-    '<td class="px-4 py-2.5 font-medium text-blue-700">' + r.sellingorganizationid + '</td>' +
-    '<td class="px-4 py-2.5 text-gray-700">' + (r.dbatradename||r.legalname||'') + '</td>' +
-    '<td class="px-4 py-2.5 text-gray-600">' + (r.dealertype||'') + '</td>' +
-    '<td class="px-4 py-2.5 text-gray-600">' + (r.territoryname||'') + '</td>' +
-    '<td class="px-4 py-2.5 text-center text-xs">' + (r.majoraccount===true||r.majoraccount==='true'?'&#x2713;':'') + '</td>' +
-    '<td class="px-4 py-2.5 text-gray-600">' + r.received_day + '</td>' +
-    '<td class="px-4 py-2.5 text-right">' + r.total_titles_count + '</td>' +
-    '<td class="px-4 py-2.5 text-right">' + r.actual_labels_count + '</td>' +
-    '<td class="px-4 py-2.5 text-right font-semibold ' + (r.potential_labels_saved>0?'text-red-600':'text-gray-400') + '">' + r.potential_labels_saved + '</td>' +
-    '<td class="px-4 py-2.5"><span class="text-xs px-2 py-0.5 rounded-full font-medium ' + (badgeClass[r.shipping_behavior]||'') + '">' + r.shipping_behavior + '</span></td></tr>'
-  ).join('');
+  if (page.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="10" class="px-4 py-8 text-center text-gray-300">No results</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = page.map(r => `
+    <tr class="table-row border-b border-gray-50">
+      <td class="px-4 py-2.5 font-medium text-blue-700">${r.sellingorganizationid}</td>
+      <td class="px-4 py-2.5 text-gray-700">${r.dbatradename || r.legalname || ''}</td>
+      <td class="px-4 py-2.5 text-gray-600">${r.dealertype || ''}</td>
+      <td class="px-4 py-2.5 text-gray-600">${r.territoryname || ''}</td>
+      <td class="px-4 py-2.5 text-center text-xs">${r.majoraccount === true || r.majoraccount === 'true' ? '✓' : ''}</td>
+      <td class="px-4 py-2.5 text-gray-600">${r.received_day}</td>
+      <td class="px-4 py-2.5 text-right">${r.total_titles_count}</td>
+      <td class="px-4 py-2.5 text-right">${r.actual_labels_count}</td>
+      <td class="px-4 py-2.5 text-right font-semibold ${r.potential_labels_saved > 0 ? 'text-red-600' : 'text-gray-400'}">${r.potential_labels_saved}</td>
+      <td class="px-4 py-2.5">
+        <span class="text-xs px-2 py-0.5 rounded-full font-medium ${badgeClass[r.shipping_behavior] || ''}">${r.shipping_behavior}</span>
+      </td>
+    </tr>
+  `).join('');
 }
 
 function changePage(delta) {
-  currentPage += delta; renderTable();
+  currentPage += delta;
+  renderTable();
   document.getElementById('data-table-body').closest('.bg-white').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+// ── Dealer Type Breakdown (pie chart) ─────────────────────────────────────
 function renderDealerTypeBreakdown() {
+  const multi = filteredData.filter(r => r.shipping_behavior === 'Multiple Labels');
   const map = {};
-  filteredData.filter(r => r.shipping_behavior === 'Multiple Labels').forEach(r => {
-    const k = r.dealertype||'(unknown)';
-    if (!map[k]) map[k] = { saved: 0, sellers: new Set() };
-    map[k].saved += r.potential_labels_saved||0; map[k].sellers.add(r.sellingorganizationid);
+  multi.forEach(r => {
+    const k = r.dealertype || '(unknown)';
+    if (!map[k]) map[k] = 0;
+    map[k] += r.potential_labels_saved || 0;
   });
-  const sorted = Object.entries(map).sort((a,b) => b[1].saved-a[1].saved);
-  const maxSaved = sorted.length > 0 ? sorted[0][1].saved : 1;
-  const colors = ['bg-blue-500','bg-indigo-400','bg-violet-400','bg-slate-400'];
-  document.getElementById('dealertype-breakdown').innerHTML = !sorted.length ? '<p class="text-xs text-gray-300">No data</p>' :
-    sorted.map(([label,v],i) => '<div class="mb-3"><div class="flex justify-between items-center mb-1"><span class="text-xs font-medium text-gray-700">' + label + '</span><span class="text-xs text-gray-400">' + v.saved.toLocaleString() + ' saved &middot; ' + v.sellers.size + ' sellers</span></div><div class="h-2 rounded-full bg-gray-100"><div class="h-2 rounded-full ' + (colors[i]||'bg-gray-300') + '" style="width:' + ((v.saved/maxSaved)*100).toFixed(1) + '%"></div></div></div>').join('');
+
+  const sorted = Object.entries(map).sort((a, b) => b[1] - a[1]);
+  const ctx = document.getElementById('dealertype-chart').getContext('2d');
+  if (dealerTypeChartInstance) dealerTypeChartInstance.destroy();
+
+  if (!sorted.length) return;
+
+  const palette = ['#3b82f6','#6366f1','#8b5cf6','#64748b','#94a3b8','#cbd5e1'];
+
+  dealerTypeChartInstance = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: sorted.map(([k]) => k),
+      datasets: [{
+        data: sorted.map(([, v]) => v),
+        backgroundColor: sorted.map((_, i) => palette[i] || '#e2e8f0'),
+        borderWidth: 2,
+        borderColor: '#fff',
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '60%',
+      plugins: {
+        legend: { position: 'right', labels: { font: { size: 11 }, boxWidth: 12, padding: 10 } },
+        tooltip: {
+          callbacks: {
+            label: (item) => {
+              const total = item.dataset.data.reduce((a, b) => a + b, 0);
+              const pct = ((item.raw / total) * 100).toFixed(1);
+              return ` ${item.raw.toLocaleString()} labels (${pct}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
 }
 
+// ── Territory Breakdown ────────────────────────────────────────────────────
 function renderTerritoryBreakdown() {
+  const multi = filteredData.filter(r => r.shipping_behavior === 'Multiple Labels');
   const map = {};
-  filteredData.filter(r => r.shipping_behavior === 'Multiple Labels').forEach(r => {
-    const k = r.territoryname||'(unknown)';
+  multi.forEach(r => {
+    const k = r.territoryname || '(unknown)';
     if (!map[k]) map[k] = { saved: 0, sellers: new Set() };
-    map[k].saved += r.potential_labels_saved||0; map[k].sellers.add(r.sellingorganizationid);
+    map[k].saved += r.potential_labels_saved || 0;
+    map[k].sellers.add(r.sellingorganizationid);
   });
-  const sorted = Object.entries(map).sort((a,b) => b[1].saved-a[1].saved).slice(0,15);
+
+  const sorted = Object.entries(map).sort((a, b) => b[1].saved - a[1].saved).slice(0, 10);
   const maxSaved = sorted.length > 0 ? sorted[0][1].saved : 1;
-  document.getElementById('territory-breakdown').innerHTML = !sorted.length ? '<p class="text-xs text-gray-300">No data</p>' :
-    sorted.map(([label,v]) => '<div class="mb-2"><div class="flex justify-between items-center mb-0.5"><span class="text-xs text-gray-700 truncate max-w-[60%]">' + label + '</span><span class="text-xs text-gray-400">' + v.saved.toLocaleString() + ' &middot; ' + v.sellers.size + ' sellers</span></div><div class="h-1.5 rounded-full bg-gray-100"><div class="h-1.5 rounded-full bg-teal-500" style="width:' + ((v.saved/maxSaved)*100).toFixed(1) + '%"></div></div></div>').join('');
+
+  document.getElementById('territory-breakdown').innerHTML = sorted.length === 0
+    ? '<p class="text-xs text-gray-300">No data</p>'
+    : sorted.map(([label, v]) => {
+        const pct = ((v.saved / maxSaved) * 100).toFixed(1);
+        return `
+          <div class="mb-2">
+            <div class="flex justify-between items-center mb-0.5">
+              <span class="text-xs text-gray-700 truncate max-w-[60%]">${label}</span>
+              <span class="text-xs text-gray-400">${v.saved.toLocaleString()} · ${v.sellers.size} sellers</span>
+            </div>
+            <div class="h-1.5 rounded-full bg-gray-100">
+              <div class="h-1.5 rounded-full bg-teal-500" style="width:${pct}%"></div>
+            </div>
+          </div>`;
+      }).join('');
 }
 </script>
 </body>
